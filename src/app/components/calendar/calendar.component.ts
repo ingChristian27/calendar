@@ -2,8 +2,12 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import { FullCalendarComponent } from "@fullcalendar/angular";
 import { EventInput } from "@fullcalendar/core";
+import { ModalCreateSlotComponent } from "../modal-create-slot/modal-create-slot.component";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGrigPlugin from "@fullcalendar/timegrid";
+import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { Reminder } from "../../models/reminder.models";
+import { ReminderService } from "../../services/reminder.service";
 
 @Component({
   selector: "app-calendar",
@@ -11,7 +15,7 @@ import timeGrigPlugin from "@fullcalendar/timegrid";
   styleUrls: ["./calendar.component.scss"]
 })
 export class CalendarComponent implements OnInit {
-  @ViewChild("calendar") calendarComponent: FullCalendarComponent;
+  modalReference: NgbModalRef;
 
   calendarPlugins = [dayGridPlugin, interactionPlugin, timeGrigPlugin];
   calendarEvents: EventInput[] = [
@@ -20,17 +24,42 @@ export class CalendarComponent implements OnInit {
     { title: "Event Now", start: "2019-12-12" }
   ];
 
-  constructor() {}
+  constructor(
+    private modalService: NgbModal,
+    private reminderService: ReminderService
+  ) {}
 
   handleDateClick(arg) {
-    if (confirm("Would you like to add an event to " + arg.dateStr + " ?")) {
-      this.calendarEvents = this.calendarEvents.concat({
-        // add new event data. must create new array
-        title: "New Event",
-        start: arg.date,
-        allDay: arg.allDay
-      });
-    }
+    let reminder = new Reminder();
+    reminder.start = arg.date;
+    console.log(arg);
+    this.reminderService.set(reminder);
+    this.modalReference = this.modalService.open(ModalCreateSlotComponent, {
+      size: "lg"
+    });
+
+    this.calendarEvents = this.calendarEvents.concat({
+      // add new event data. must create new array
+      title: "New Event",
+      start: arg.date,
+      allDay: arg.allDay
+    });
+  }
+  OpenModal(start, end, allDay) {
+    let reminder = new Reminder();
+    /*
+    Reminder.start = start.format();
+    Reminder.end = end.format();
+    Reminder.id = 0;
+    Reminder.resource = this.currentResource ? this.currentResource : null;
+    
+    this.slotService.set(slot);
+
+    $.CalendarApp.onSelect(start, end, allDay);
+    this.modalReference = this.modalService.open(CreateSlotComponent, {
+      size: "lg"
+    });
+    */
   }
 
   ngOnInit() {}
