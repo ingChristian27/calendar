@@ -3,7 +3,7 @@ export class Reminder {
   start: Date;
   end: Date;
   city: String;
-  description: string;
+  title: string;
   className: string;
 
   constructor() {}

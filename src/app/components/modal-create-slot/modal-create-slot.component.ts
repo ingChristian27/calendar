@@ -31,19 +31,20 @@ export class ModalCreateSlotComponent implements OnInit {
 
     const formatStartDate = moment(this.reminder.start).format("YYYY-MM-DD");
     this.formReminder = this.fb.group({
-      description: [this.reminder.description, Validators.maxLength(4)],
+      title: [this.reminder.title, Validators.maxLength(30)],
       city: [this.reminder.city],
       start: [formatStartDate]
     });
   }
 
-  onClickSubmit(description) {
-    console.log(this.formReminder);
+  onClickSubmit() {
+    this.reminder = this.formReminder.value;
+    this.reminderService.set(this.reminder);
+    this.reminderService.notificationChange();
     if (this.formReminder.invalid) {
       alert("invalido");
       return;
     }
-    alert("Your Email is : " + description);
   }
 
   ngOnInit() {}

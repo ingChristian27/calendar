@@ -29,6 +29,17 @@ export class CalendarComponent implements OnInit {
     private reminderService: ReminderService
   ) {}
 
+  ngOnInit() {
+    this.reminderService.getReminder().subscribe(
+      data => {
+        if (data[0] != undefined)
+          this.calendarEvents = this.calendarEvents.concat(data[0]);
+      },
+      error => {
+        console.log("error", error);
+      }
+    );
+  }
   handleDateClick(arg) {
     let reminder = new Reminder();
     reminder.start = arg.date;
@@ -45,24 +56,6 @@ export class CalendarComponent implements OnInit {
       allDay: arg.allDay
     });
   }
-  OpenModal(start, end, allDay) {
-    let reminder = new Reminder();
-    /*
-    Reminder.start = start.format();
-    Reminder.end = end.format();
-    Reminder.id = 0;
-    Reminder.resource = this.currentResource ? this.currentResource : null;
-    
-    this.slotService.set(slot);
-
-    $.CalendarApp.onSelect(start, end, allDay);
-    this.modalReference = this.modalService.open(CreateSlotComponent, {
-      size: "lg"
-    });
-    */
-  }
-
-  ngOnInit() {}
 
   addEvent() {
     let event = { title: "event 2", date: "2019-12-02" };
