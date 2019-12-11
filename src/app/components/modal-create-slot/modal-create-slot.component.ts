@@ -5,6 +5,7 @@ import { NgbDateStruct, NgbCalendar } from "@ng-bootstrap/ng-bootstrap";
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { Validators } from "@angular/forms";
 import { ReminderService } from "../../services/reminder.service";
+import { WeatherCitiesService } from "../../services/weather-cities.service";
 import * as moment from "moment";
 
 @Component({
@@ -14,12 +15,14 @@ import * as moment from "moment";
 })
 export class ModalCreateSlotComponent implements OnInit {
   formReminder: FormGroup;
+  citiesWeather: [];
   reminder: Reminder;
 
   constructor(
     public activeModal: NgbActiveModal,
     private fb: FormBuilder,
-    private reminderService: ReminderService
+    private reminderService: ReminderService,
+    private serviceWeather: WeatherCitiesService
   ) {
     this.reminder = this.reminderService.get();
     this.createForm();
@@ -28,6 +31,7 @@ export class ModalCreateSlotComponent implements OnInit {
 
   createForm() {
     const formatStartDate = moment(this.reminder.start).format("YYYY-MM-DD");
+
     this.formReminder = this.fb.group({
       title: [this.reminder.title, Validators.maxLength(30)],
       city: [this.reminder.city],
@@ -38,6 +42,7 @@ export class ModalCreateSlotComponent implements OnInit {
 
   onClickSubmit() {
     this.closeModal();
+
     this.reminder = this.formReminder.value;
     this.reminderService.set(this.reminder);
     this.reminderService.notificationChange();
@@ -46,6 +51,25 @@ export class ModalCreateSlotComponent implements OnInit {
       alert("invalido");
       return;
     }
+  }
+  findCity(event) {
+    let city = this.formReminder.value.city;
+    console.log(city);
+    let data = { city };
+    this.serviceWeather.getCities(data).subscribe(
+      res => {
+        console.log(res);
+        this.citiesWeather = res.list;
+        console.log(this.citiesWeather);
+      },
+      err => {}
+    );
+  }
+  selectCity(item) {
+    this.formReminder.controls["city"].setValue(
+      item.name + " , " + item.sys.country + " " + item.weather[0].description
+    );
+    this.citiesWeather = [];
   }
 
   closeModal() {

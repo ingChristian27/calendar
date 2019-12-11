@@ -7,6 +7,7 @@ import { CalendarComponent } from "./components/calendar/calendar.component";
 import { NgbModule, NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { ModalCreateSlotComponent } from "../app/components/modal-create-slot/modal-create-slot.component";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
 @NgModule({
   declarations: [AppComponent, CalendarComponent, ModalCreateSlotComponent],
   imports: [
@@ -15,10 +16,11 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
     AppRoutingModule,
     FullCalendarModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   entryComponents: [ModalCreateSlotComponent],
-  providers: [NgbActiveModal],
+  providers: [NgbActiveModal, HttpClientModule],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
