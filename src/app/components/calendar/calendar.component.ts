@@ -19,9 +19,14 @@ export class CalendarComponent implements OnInit {
 
   calendarPlugins = [dayGridPlugin, interactionPlugin, timeGrigPlugin];
   calendarEvents: EventInput[] = [
+    {
+      title: "Event Now",
+      start: new Date(),
+      color: "yellow",
+      editable: true
+    },
     { title: "Event Now", start: new Date() },
-    { title: "Event Now", start: new Date() },
-    { title: "Event Now", start: "2019-12-12" }
+    { title: "Event Now", start: "2019-12-12", color: "red" }
   ];
 
   constructor(
@@ -40,26 +45,19 @@ export class CalendarComponent implements OnInit {
       }
     );
   }
+
   handleDateClick(arg) {
     let reminder = new Reminder();
     reminder.start = arg.date;
-    console.log(arg);
     this.reminderService.set(reminder);
     this.modalReference = this.modalService.open(ModalCreateSlotComponent, {
       size: "lg"
     });
-
-    this.calendarEvents = this.calendarEvents.concat({
-      // add new event data. must create new array
-      title: "New Event",
-      start: arg.date,
-      allDay: arg.allDay
-    });
   }
 
-  addEvent() {
-    let event = { title: "event 2", date: "2019-12-02" };
-    //this.calendarEvents.push(event);
+  calendarEventClick(event) {
+    console.log(event);
+    alert(event);
   }
 
   modifyTitle(eventIndex, newTitle) {

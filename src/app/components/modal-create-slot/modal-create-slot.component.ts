@@ -18,36 +18,35 @@ export class ModalCreateSlotComponent implements OnInit {
 
   constructor(
     public activeModal: NgbActiveModal,
-    private calendar: NgbCalendar,
     private fb: FormBuilder,
     private reminderService: ReminderService
   ) {
     this.reminder = this.reminderService.get();
     this.createForm();
   }
+  ngOnInit() {}
 
   createForm() {
-    console.log(this.reminder.start);
-
     const formatStartDate = moment(this.reminder.start).format("YYYY-MM-DD");
     this.formReminder = this.fb.group({
       title: [this.reminder.title, Validators.maxLength(30)],
       city: [this.reminder.city],
-      start: [formatStartDate]
+      start: [formatStartDate],
+      color: ["blue"]
     });
   }
 
   onClickSubmit() {
+    this.closeModal();
     this.reminder = this.formReminder.value;
     this.reminderService.set(this.reminder);
     this.reminderService.notificationChange();
+
     if (this.formReminder.invalid) {
       alert("invalido");
       return;
     }
   }
-
-  ngOnInit() {}
 
   closeModal() {
     this.activeModal.close();
