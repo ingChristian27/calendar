@@ -8,6 +8,7 @@ import timeGrigPlugin from "@fullcalendar/timegrid";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Reminder } from "../../models/reminder";
 import { ReminderService } from "../../services/reminder.service";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-calendar",
@@ -49,8 +50,7 @@ export class CalendarComponent implements OnInit {
 
   fintIndexReminderForUpdated(EditReminder) {
     let index = this.findReminderIntoCalendarIndex(EditReminder);
-    //this.modifyReminder(index, EditReminder);
-    this.deleteReminder(index);
+    this.modifyReminder(index, EditReminder);
   }
 
   modifyReminder(eventIndex, reminder) {
@@ -99,7 +99,20 @@ export class CalendarComponent implements OnInit {
     });
   }
   calendarEventClick(e) {
-    let currentReminder = this.findReminderIntoCalendar(e.event);
-    this.editReminder(currentReminder);
+    Swal.fire({
+      title: "What do you want to do",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Edit",
+      cancelButtonText: "Delete"
+    }).then(result => {
+      if (result.value) {
+        let currentReminder = this.findReminderIntoCalendar(e.event);
+        this.editReminder(currentReminder);
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        let index = this.findReminderIntoCalendarIndex(e.event);
+        this.deleteReminder(index);
+      }
+    });
   }
 }
