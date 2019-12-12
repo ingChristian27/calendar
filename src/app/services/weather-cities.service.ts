@@ -10,7 +10,6 @@ export class WeatherCitiesService {
   constructor(private httpClient: HttpClient) {}
 
   getCities(data): Observable<any> {
-    let date = 157603542899;
     let url =
       "http://api.openweathermap.org/data/2.5/find?q=" +
       data.city +
@@ -18,7 +17,8 @@ export class WeatherCitiesService {
       this.key +
       "&sort=populationcnt=30" +
       "&_=" +
-      date;
+      data.date;
+    console.log(url);
     return this.httpClient.get(url);
   }
 }

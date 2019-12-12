@@ -29,10 +29,11 @@
                     />
                 </div>
             </div>
+            
             <div class="col-md-6">
                 <div class="form-group">
                     <label>Date</label>
-                    <input class="form-control" type="date" name="start" formControlName="start" />
+                    <input class="form-control" type="date" name="start" formControlName="start"    (change)="findCity($event)"/>
                 </div>
             </div>
             <div class="col-md-6">

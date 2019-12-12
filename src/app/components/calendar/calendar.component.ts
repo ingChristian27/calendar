@@ -23,10 +23,18 @@ export class CalendarComponent implements OnInit {
       title: "Event Now",
       start: new Date(),
       color: "yellow",
-      editable: true
+      editable: true,
+      id: 10
     },
-    { title: "Event Now", start: new Date() },
-    { title: "Event Now", start: "2019-12-12", color: "red" }
+    { title: "Event Now", start: new Date(), id: 2 },
+    {
+      title: "test",
+      start: "2019-12-12",
+      color: "red",
+      city: "cartagena",
+      editable: true,
+      id: 1
+    }
   ];
 
   constructor(
@@ -35,15 +43,10 @@ export class CalendarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.reminderService.getReminder().subscribe(
-      data => {
-        if (data[0] != undefined)
-          this.calendarEvents = this.calendarEvents.concat(data[0]);
-      },
-      error => {
-        console.log("error", error);
-      }
-    );
+    this.reminderService.getReminder().subscribe(data => {
+      if (data[0] != undefined)
+        this.calendarEvents = this.calendarEvents.concat(data[0]);
+    });
   }
 
   handleDateClick(arg) {
@@ -57,10 +60,15 @@ export class CalendarComponent implements OnInit {
 
   calendarEventClick(event) {
     console.log(event);
-    alert(event);
+
+    console.log(this.calendarEvents);
+    this.calendarEvents.forEach(event => {
+      console.log(event);
+    });
+    console.log(event.city);
   }
 
   modifyTitle(eventIndex, newTitle) {
-    //this.calendarEvents[eventIndex].title = newTitle;
+    this.calendarEvents[eventIndex].title = newTitle;
   }
 }

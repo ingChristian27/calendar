@@ -17,7 +17,8 @@ export class ModalCreateSlotComponent implements OnInit {
   formReminder: FormGroup;
   citiesWeather: [];
   reminder: Reminder;
-
+  currentCity: string;
+  currentDate: string;
   constructor(
     public activeModal: NgbActiveModal,
     private fb: FormBuilder,
@@ -52,19 +53,19 @@ export class ModalCreateSlotComponent implements OnInit {
       return;
     }
   }
-  findCity(event) {
+  findCity() {
     let city = this.formReminder.value.city;
-    console.log(city);
-    let data = { city };
+    let date = new Date(this.formReminder.value.start).getTime();
+    let data = { city, date };
+
     this.serviceWeather.getCities(data).subscribe(
       res => {
-        console.log(res);
         this.citiesWeather = res.list;
-        console.log(this.citiesWeather);
       },
       err => {}
     );
   }
+
   selectCity(item) {
     this.formReminder.controls["city"].setValue(
       item.name + " , " + item.sys.country + " " + item.weather[0].description
