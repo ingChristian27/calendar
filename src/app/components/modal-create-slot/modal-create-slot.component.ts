@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { Reminder } from "../../models/reminder";
 import { ErrorFormReminder } from "../../models/error-form-reminder";
+import { colors } from "../../models/colors";
 import { NgbDateStruct, NgbCalendar } from "@ng-bootstrap/ng-bootstrap";
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { Validators } from "@angular/forms";
@@ -17,6 +18,7 @@ import * as moment from "moment";
 export class ModalCreateSlotComponent implements OnInit {
   formReminder: FormGroup;
   error: ErrorFormReminder;
+  colors: any;
   citiesWeather: [];
   reminder: Reminder;
   currentCity: string;
@@ -30,6 +32,7 @@ export class ModalCreateSlotComponent implements OnInit {
     this.reminder = this.reminderService.get();
     this.createForm();
     this.error = new ErrorFormReminder();
+    this.colors = colors;
   }
   ngOnInit() {}
 
@@ -43,12 +46,12 @@ export class ModalCreateSlotComponent implements OnInit {
       ],
       city: [this.reminder.city],
       start: [formatStartDate],
-      color: ["blue"]
+      color: ["blue"],
+      id: [this.reminder.id]
     });
   }
 
   onClickSubmit() {
-    console.log(this.formReminder);
     if (!this.formReminder.invalid) {
       this.closeModal();
       this.reminder = this.formReminder.value;
