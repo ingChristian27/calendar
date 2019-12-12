@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Reminder } from "../models/reminder.models";
+import { Reminder } from "../models/reminder";
 import { BehaviorSubject, Observable, of } from "rxjs";
 
 @Injectable({

@@ -6,7 +6,7 @@ import { ModalCreateSlotComponent } from "../modal-create-slot/modal-create-slot
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGrigPlugin from "@fullcalendar/timegrid";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import { Reminder } from "../../models/reminder.models";
+import { Reminder } from "../../models/reminder";
 import { ReminderService } from "../../services/reminder.service";
 
 @Component({

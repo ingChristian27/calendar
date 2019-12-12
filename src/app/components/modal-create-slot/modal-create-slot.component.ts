@@ -39,7 +39,7 @@ export class ModalCreateSlotComponent implements OnInit {
     this.formReminder = this.fb.group({
       title: [
         this.reminder.title,
-        [Validators.maxLength(4), Validators.required]
+        [Validators.maxLength(30), Validators.required]
       ],
       city: [this.reminder.city],
       start: [formatStartDate],
