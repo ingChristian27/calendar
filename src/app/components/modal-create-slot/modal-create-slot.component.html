@@ -17,16 +17,23 @@
     <form [formGroup]="formReminder">
         <div class="row">
             <div class="col-md-12">
-                <div class="form-group">
+           
+           
+            <div class="form-group">
                     <label>Description</label>
                     <input
                     class="form-control"
+                    [ngClass]="{'is-invalid' : error.name.status}"
                     type="text"
                     name="title"
                     placeholder="title"
                     formControlName="title"
                     #title
                     />
+                    <div class="invalid-feedback">
+                        {{ error.name.message}}
+                    </div>
+                   
                 </div>
             </div>
             

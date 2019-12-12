@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
-import { Reminder } from "../../models/reminder.models";
+import { Reminder } from "../../models/reminder";
+import { ErrorFormReminder } from "../../models/error-form-reminder";
 import { NgbDateStruct, NgbCalendar } from "@ng-bootstrap/ng-bootstrap";
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { Validators } from "@angular/forms";
@@ -15,6 +16,7 @@ import * as moment from "moment";
 })
 export class ModalCreateSlotComponent implements OnInit {
   formReminder: FormGroup;
+  error: ErrorFormReminder;
   citiesWeather: [];
   reminder: Reminder;
   currentCity: string;
@@ -27,6 +29,7 @@ export class ModalCreateSlotComponent implements OnInit {
   ) {
     this.reminder = this.reminderService.get();
     this.createForm();
+    this.error = new ErrorFormReminder();
   }
   ngOnInit() {}
 
@@ -34,7 +37,10 @@ export class ModalCreateSlotComponent implements OnInit {
     const formatStartDate = moment(this.reminder.start).format("YYYY-MM-DD");
 
     this.formReminder = this.fb.group({
-      title: [this.reminder.title, Validators.maxLength(30)],
+      title: [
+        this.reminder.title,
+        [Validators.maxLength(4), Validators.required]
+      ],
       city: [this.reminder.city],
       start: [formatStartDate],
       color: ["blue"]
@@ -42,17 +48,27 @@ export class ModalCreateSlotComponent implements OnInit {
   }
 
   onClickSubmit() {
-    this.closeModal();
-
-    this.reminder = this.formReminder.value;
-    this.reminderService.set(this.reminder);
-    this.reminderService.notificationChange();
-
-    if (this.formReminder.invalid) {
-      alert("invalido");
-      return;
+    console.log(this.formReminder);
+    if (!this.formReminder.invalid) {
+      this.closeModal();
+      this.reminder = this.formReminder.value;
+      this.reminderService.set(this.reminder);
+      this.reminderService.notificationChange();
+    } else {
+      this.printError(this.formReminder.controls);
     }
   }
+
+  printError(controls) {
+    if (controls.title.errors) {
+      let error = controls.title.errors;
+      if (error.required) this.error.name.message = "input is required";
+      if (error.maxlength)
+        this.error.name.message = "your string must be less than 30 characters";
+      this.error.name.status = true;
+    }
+  }
+
   findCity() {
     let city = this.formReminder.value.city;
     let date = new Date(this.formReminder.value.start).getTime();
