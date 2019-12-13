@@ -13,7 +13,7 @@
 </div>
 
 <div class="modal-body">
-  <form [formGroup]="formReminder">
+  <form [formGroup]="formReminder" (submit)="onClickSubmit()">
     <div class="row">
       <div class="col-md-12">
         <div class="form-group">
@@ -41,7 +41,7 @@
             type="date"
             name="start"
             formControlName="start"
-            (change)="findCity($event)"
+            (change)="findCity()"
           />
         </div>
       </div>
@@ -83,12 +83,10 @@
       </div>
 
       <div class="col-md-4">
-        <button type="button" class="btn btn-success" (click)="onClickSubmit()">
+        <button type="submit" class="btn btn-success">
           Create
         </button>
       </div>
     </div>
   </form>
-
-  <!-- <label>{{ formReminder.controls.description.errors }}</label> -->
 </div>

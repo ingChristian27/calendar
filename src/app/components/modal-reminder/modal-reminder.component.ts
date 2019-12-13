@@ -3,7 +3,6 @@ import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
 import { Reminder } from "../../models/reminder";
 import { ErrorFormReminder } from "../../models/error-form-reminder";
 import { colors } from "../../models/colors";
-import { NgbDateStruct, NgbCalendar } from "@ng-bootstrap/ng-bootstrap";
 import { FormGroup, FormBuilder } from "@angular/forms";
 import { Validators } from "@angular/forms";
 import { ReminderService } from "../../services/reminder.service";
@@ -11,11 +10,11 @@ import { WeatherCitiesService } from "../../services/weather-cities.service";
 import * as moment from "moment";
 
 @Component({
-  selector: "app-modal-create-slot",
-  templateUrl: "./modal-create-slot.component.html",
-  styleUrls: ["./modal-create-slot.component.scss"]
+  selector: "app-modal-reminder",
+  templateUrl: "./modal-reminder.component.html",
+  styleUrls: ["./modal-reminder.component.scss"]
 })
-export class ModalCreateSlotComponent implements OnInit {
+export class ModalReminderComponent implements OnInit {
   formReminder: FormGroup;
   error: ErrorFormReminder;
   colors: any;
@@ -23,6 +22,7 @@ export class ModalCreateSlotComponent implements OnInit {
   reminder: Reminder;
   currentCity: string;
   currentDate: string;
+
   constructor(
     public activeModal: NgbActiveModal,
     private fb: FormBuilder,
@@ -54,12 +54,16 @@ export class ModalCreateSlotComponent implements OnInit {
   onClickSubmit() {
     if (!this.formReminder.invalid) {
       this.closeModal();
-      this.reminder = this.formReminder.value;
-      this.reminderService.set(this.reminder);
-      this.reminderService.notificationChange();
+      this.sendReminderToCalendar();
     } else {
       this.printError(this.formReminder.controls);
     }
+  }
+
+  sendReminderToCalendar() {
+    this.reminder = this.formReminder.value;
+    this.reminderService.set(this.reminder);
+    this.reminderService.notificationChange();
   }
 
   printError(controls) {
@@ -73,16 +77,20 @@ export class ModalCreateSlotComponent implements OnInit {
   }
 
   findCity() {
+    const data = this.getDataForFindCity();
+    this.findCityApi(data);
+  }
+
+  getDataForFindCity() {
     let city = this.formReminder.value.city;
     let date = new Date(this.formReminder.value.start).getTime();
-    let data = { city, date };
+    return { city, date };
+  }
 
-    this.serviceWeather.getCities(data).subscribe(
-      res => {
-        this.citiesWeather = res.list;
-      },
-      err => {}
-    );
+  findCityApi(data) {
+    this.serviceWeather.getCities(data).subscribe(res => {
+      this.citiesWeather = res.list;
+    });
   }
 
   selectCity(item) {

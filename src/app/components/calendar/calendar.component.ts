@@ -1,8 +1,6 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import { FullCalendarComponent } from "@fullcalendar/angular";
-import { EventInput } from "@fullcalendar/core";
-import { ModalCreateSlotComponent } from "../modal-create-slot/modal-create-slot.component";
+import { ModalReminderComponent } from "../modal-reminder/modal-reminder.component";
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGrigPlugin from "@fullcalendar/timegrid";
 import { NgbModalRef, NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -94,7 +92,7 @@ export class CalendarComponent implements OnInit {
   }
 
   openModal() {
-    this.modalReference = this.modalService.open(ModalCreateSlotComponent, {
+    this.modalReference = this.modalService.open(ModalReminderComponent, {
       size: "lg"
     });
   }
