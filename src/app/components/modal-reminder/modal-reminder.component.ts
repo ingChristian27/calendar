@@ -46,7 +46,7 @@ export class ModalReminderComponent implements OnInit {
       ],
       city: [this.reminder.city],
       start: [formatStartDate],
-      color: ["blue"],
+      color: [this.reminder.color],
       id: [this.reminder.id]
     });
   }
